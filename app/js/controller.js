@@ -14,12 +14,12 @@ var store = angular.module('store',['ngRoute'])
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    data: $.param({user_app_id:'app_id', service_app_name:'Product', request_string: "get"})
+    data: $.param({user_app_id:'app_id', service_app_name:'Shipment', request_string: "get"})
   };
 
   // get product info from ASA
   $http(req).success(function(data) {
-    $scope.orders = angular.fromJson(data.response);
+    $scope.shipments = angular.fromJson(data.response);
   });
 
   // to avoid flashing during page loading

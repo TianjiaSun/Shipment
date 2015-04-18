@@ -25,70 +25,44 @@
 
   <!-- This is main page -->
   <div id="list_container" hidden>
+    <!-- This is all shipment list -->
+    <div ng-repeat="shipment in shipments | orderBy:'id'">
 
-  <!-- This is order list -->
-  <div ng-repeat="order in orders | orderBy:'id'">
-    <div 
-      ng-class="{
-        'order_unit': true, 
-        'order_unit_expand': order.expand===true
-        }"
-      ng-init="order.expand=false;">
-
-      <!-- This is order brief info -->
-      <div 
-        class="order_content"       
-        ng-click="order.expand=!order.expand; 
-        order.expand_edit=true; order.expand_product=false; order.expand_shipment=false; order.expand_inventory=false; order.expand_customer=false;">
-        <div class="order_shipto">In 2 Days Ship To</div>
-        <div class="order_shipto_address">3113 Mount Isabel Drive, San Jose, CA, US. 95148</div>
-        <img  ng-class="{
-              'shipped_no': showShipped_flag===false, 
-              'shipped_yes': showShipped_flag===true
-              }"
-              src="img/shipped_2.png"/>
+      <!-- This is need to ship list -->
+      <div class="shipment_unit" ng-init="shipment.expand=false;" ng-show="shipment.status==='Pending'">
+        <div class="order_content" ng-click="">
+          <div class="ship_time">Deliver in 2 days to:</div>
+          <div class="ship_address">3113 Mount Isabel Drive, San Jose, CA, US. 95148</div>
+        </div>
+        <div class="expand_container">
+        </div>
       </div>
 
-      <!-- This is expand containers -->
-      <div class="expand_container">
-
-        <!-- This is app icon links -->
-        <div class="app_icon_container">
-            <img  ng-class="{
-                  'app_icon_medium': order.expand_product===false || order.expand===false, 
-                  'app_icon_medium_active': order.expand_product===true && order.expand===true
-                  }"
-                  src="img/product.png"
-                  ng-click="order.expand=true;
-                  order.expand_edit=false; order.expand_product=true; order.expand_shipment=false; order.expand_inventory=false; order.expand_customer=false;"
-                  ng-init="order.expand_product=false;"/>   
-            <img  ng-class="{
-                  'app_icon_medium': order.expand_shipment===false || order.expand===false, 
-                  'app_icon_medium_active': order.expand_shipment===true && order.expand===true
-                  }"
-                  src="img/shipment.png"
-                  ng-click="order.expand=true;
-                  order.expand_edit=false; order.expand_product=false; order.expand_shipment=true; order.expand_inventory=false; order.expand_customer=false;"
-                  ng-init="order.expand_shipment=false;"/>
-            <img  ng-class="{
-                  'app_icon_medium': order.expand_customer===false || order.expand===false, 
-                  'app_icon_medium_active': order.expand_customer===true && order.expand===true
-                  }"
-                  src="img/customer.png"
-                  ng-click="order.expand=true;
-                  order.expand_edit=false; order.expand_product=false; order.expand_shipment=false; order.expand_inventory=false; order.expand_customer=true;"
-                  ng-init="order.expand_customer=false;"/> 
-            <img  class="app_icon_medium"
-                  ng-click="newApp()"
-                  src="img/add_link.png"/> 
+      <!-- This is shipped list -->
+      <div class="shipment_unit" ng-init="shipment.expand=false;" ng-show="shipment.status!=='Pending'">
+        <div class="order_content_shipped" ng-click="">
+          <div class="progessbar"></div>
+          <div ng-class="{
+              progessbar_progress: true,
+              scheduled: shipment.status==='Scheduled',
+              picked_up: shipment.status==='Picked Up',
+              in_transit: shipment.status==='In Transit',
+              delivered: shipment.status==='Delivered'
+              }">
+            <div class="package">
+              <div class="package_tail" ng-show="shipment.status!=='Scheduled'"></div>
+              <img class="package_img" src="img/package.png"/>
+              <div class="package_status">{{shipment.status}}</div>
+            </div>
+          </div>
+        <div class="expand_container">
         </div>
-
       </div>
     </div>
   </div>
 
+  <div class="end_bar"></div>
 
-  </div>
 
   <script src="jquery-1.11.2.min.js"></script>
   <script src="bower_components/angular/angular.js"></script>
