@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="store" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animate.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="app.css">
+  <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+  <title>Orders</title>
+</head>
+<body data-ng-controller="StoreListCtrl" data-ng-init="init()" style="overflow: hidden;">
+<div class="whole_container">
+  
+  <div id="Search_container">
+  <nav>
+    <ul>
+      <li class="view_select_Sort">
+        Sort
+        <img class="view_select_icon" src="img/view.png"/>
+        <ul>
+          <li class="view_option fadeIn fadeIn-20ms">By Time</li>
+          <li class="view_option fadeIn fadeIn-20ms fadeIn-Delay-10ms">By Channel</li>
+          <li class="view_option fadeIn fadeIn-20ms fadeIn-Delay-20ms">By Price</li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <input class="search_bar_input" placeholder="Search orders ..." ng-model="query" ng-keydown="selectSearch($event)"></input>
+  <div class="search_bar_bn">Search</div>
+  </div>
+
+  <!-- This is main page -->
+  <div id="list_container" hidden>
+
+    <!-- This is category Bar -->
+    <div class="category_container">
+      <div ng-class="{
+        'category_unit_selected': showOrders_flag===true,
+        'category_unit': true,
+        'fadeIn': true,
+        'fadeIn-100ms': true}" 
+        ng-click="showOrders()">
+        Opens (4)
+      </div>
+      <div ng-class="{
+        'category_unit_selected': showShipped_flag===true,
+        'category_unit': true,
+        'fadeIn': true,
+        'fadeIn-100ms': true}" 
+        ng-click="showShipped()">
+        Shipped (0)
+      </div>
+      <div ng-class="{
+        'category_unit_selected': showCancelled_flag===true,
+        'category_unit': true,
+        'fadeIn': true,
+        'fadeIn-100ms': true}" 
+        ng-click="showCancelled()">
+        Cancelled (0)
+      </div>
+    </div>
+
+  <!-- This is add new order --> 
+  <div class="order_unit">
+    <div class="order_content_without_color_change">
+      <img class="add_order_img_gray" src="img/add_order_gray.png"/>
+      <img class="add_order_img" src="img/add_order.png"/>
+      <div class="add_order_text">Add an order manually</div>
+    </div>
+  </div>
+
+  <!-- This is order list -->
+  <div ng-repeat="order in orders | orderBy:'id'">
+    <div 
+      ng-class="{
+        'order_unit': true, 
+        'order_unit_expand': order.expand===true
+        }"
+      ng-init="order.expand=false;">
+
+      <!-- This is order brief info -->
+      <div 
+        class="order_content"       
+        ng-click="order.expand=!order.expand; 
+        order.expand_edit=true; order.expand_product=false; order.expand_shipment=false; order.expand_inventory=false; order.expand_customer=false;">
+        <div class="order_time">02/11/2015 <span style="font-size: 13px;">13:43</span></div>
+        <div class="order_from">Amazon  <span style="font-size: 12px;">#114-0684189-7053857</span></div>
+        <img  ng-class="{
+              'cancelled_no': showCancelled_flag===false, 
+              'cancelled_yes': showCancelled_flag===true
+              }"
+              src="img/cancelled_2.png"/>
+        <div class="order_total">TOTAL</div>
+        <div class="order_total_price">$123.00</div>
+        <div class="order_shipto">In 2 Days Ship To</div>
+        <div class="order_shipto_address">3113 Mount Isabel Drive, San Jose, CA, US. 95148</div>
+        <img  ng-class="{
+              'shipped_no': showShipped_flag===false, 
+              'shipped_yes': showShipped_flag===true
+              }"
+              src="img/shipped_2.png"/>
+      </div>
+
+      <!-- This is app icon links -->
+      <div class="app_icon_container">
+          <img  ng-class="{
+                'app_icon_medium': order.expand_edit===false || order.expand===false, 
+                'app_icon_medium_active': order.expand_edit===true && order.expand===true
+                }"
+                src="img/edit.png"
+                ng-click="order.expand=true;
+                order.expand_edit=true; order.expand_product=false; order.expand_shipment=false; order.expand_inventory=false; order.expand_customer=false;"
+                ng-init="order.expand_edit=true;"/>
+          <img  ng-class="{
+                'app_icon_medium': order.expand_product===false || order.expand===false, 
+                'app_icon_medium_active': order.expand_product===true && order.expand===true
+                }"
+                src="img/product.png"
+                ng-click="order.expand=true;
+                order.expand_edit=false; order.expand_product=true; order.expand_shipment=false; order.expand_inventory=false; order.expand_customer=false;"
+                ng-init="order.expand_product=false;"/>   
+          <img  ng-class="{
+                'app_icon_medium': order.expand_shipment===false || order.expand===false, 
+                'app_icon_medium_active': order.expand_shipment===true && order.expand===true
+                }"
+                src="img/shipment.png"
+                ng-click="order.expand=true;
+                order.expand_edit=false; order.expand_product=false; order.expand_shipment=true; order.expand_inventory=false; order.expand_customer=false;"
+                ng-init="order.expand_shipment=false;"/>
+          <img  ng-class="{
+                'app_icon_medium': order.expand_inventory===false || order.expand===false, 
+                'app_icon_medium_active': order.expand_inventory===true && order.expand===true
+                }"
+                src="img/inventory.png"
+                ng-click="order.expand=true;
+                order.expand_edit=false; order.expand_product=false; order.expand_shipment=false; order.expand_inventory=true; order.expand_customer=false;"
+                ng-init="order.expand_inventory=false;"/> 
+          <img  ng-class="{
+                'app_icon_medium': order.expand_customer===false || order.expand===false, 
+                'app_icon_medium_active': order.expand_customer===true && order.expand===true
+                }"
+                src="img/customer.png"
+                ng-click="order.expand=true;
+                order.expand_edit=false; order.expand_product=false; order.expand_shipment=false; order.expand_inventory=false; order.expand_customer=true;"
+                ng-init="order.expand_customer=false;"/> 
+          <img  class="app_icon_medium"
+                ng-click="newApp()"
+                src="img/add_link.png"/> 
+      </div>
+
+      <!-- This is expand containers -->
+      <div class="expand_container">
+
+        <div class="detail_container" ng-show="order.expand_edit==true">
+          <div class="detail_block fadeIn fadeIn-50ms">
+            <div class="detail_block_header">Channel</div>
+            <div class="detail_block_content">
+              <div class="detail_block_content_header">Amazon:</div>
+              <div class="detail_block_content_details">
+                02/11/2015 13:43
+              </div>
+              <div class="detail_block_content_header">Order#:</div>
+              <div class="detail_block_content_details">
+                114-0684189-7053857
+              </div>
+            </div>
+          </div>
+          <div class="detail_block fadeIn fadeIn-50ms">
+            <div class="detail_block_header">Item(s)</div>
+            <div class="detail_block_content">
+              <div class="detail_block_content_header">X1:</div>
+              <div class="detail_block_content_details_hoverable">
+                Kate Spade New York Cedar Street Handle Handbag
+              </div>
+              <div class="detail_block_content_header">X2:</div>
+              <div class="detail_block_content_details_hoverable">
+                MyLux® Fashion Designer Office Tote Shoulder Handbag 507580
+              </div>
+            </div>
+          </div>
+          <div class="detail_block fadeIn fadeIn-50ms">
+            <div class="detail_block_header">Payment</div>
+            <div class="detail_block_content">
+              <div class="detail_block_content_header">Method:</div>
+              <div class="detail_block_content_details">
+                MasterCard ending in 8755
+              </div>
+              <div class="detail_block_content_header">Total Amount:</div>
+              <div class="detail_block_content_details">
+                $123.00 Approved
+              </div>
+            </div>
+          </div>
+          <div class="detail_block fadeIn fadeIn-50ms">
+            <div class="detail_block_header">Shipping</div>
+            <div class="detail_block_content">
+              <div class="detail_block_content_header">Tracking:</div>
+              <div class="detail_block_content_details_hoverable">
+                in Warehouse
+              </div>
+              <div class="detail_block_content_header">Shipping Address:</div>
+              <div class="detail_block_content_details_hoverable">
+                Dr. Thomas Sun</br>
+                4275 BURTON DR</br>
+                SANTA CLARA, CA 95054-1512</br>
+                United States</br>
+              </div>
+            </div>
+          </div>
+          <div class="detail_block fadeIn fadeIn-50ms">
+            <div class="detail_block_header">Summary</div>
+            <div class="detail_block_content">
+              <div class="detail_block_content_header">Item(s):</div>
+              <div class="detail_block_content_right">
+                $123.00
+              </div>
+              <div class="detail_block_content_header">Shipping:</div>
+              <div class="detail_block_content_right">
+                $0.00
+              </div>
+              <div class="detail_block_content_header">Total:</div>
+              <div class="detail_block_content_right">
+                $123.00
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- product plugview -->
+        <div class="detail_container" ng-show="order.expand_product==true">
+          <iframe class="Products_plugview_container fadeIn fadeIn-50ms" frameBorder="0"
+            src="http://tianjiasun.github.io/Products_plugview/app/index.html#/open=1"></iframe>
+          <div class="Product_count fadeIn fadeIn-50ms">X1</div>
+          <iframe class="Products_plugview_container fadeIn fadeIn-50ms" frameBorder="0"
+            src="http://tianjiasun.github.io/Products_plugview/app/index.html#/open=2"></iframe>
+          <div class="Product_count fadeIn fadeIn-50ms">X2</div>
+        </div>
+
+        <!-- shipment -->
+        <div class="detail_container" ng-show="order.expand_shipment==true">
+          <div class="shipment_container">
+            <div class="shipment_condition_container">
+
+            </div>
+
+            <div class="case_container fadeIn fadeIn-50ms">
+              <div class="shipping_option_title">Measure Weight</div>
+              <img class="scale fadeIn fadeIn-50ms fadeIn-Delay-50ms" src="img/scale.png"/>
+              <input class="weight_input fadeIn fadeIn-50ms fadeIn-Delay-50ms" value="2.3 Pound"></input>
+              <div class="nearest_site"><span style="text-decoration:underline">An Oversized Package?</span></div>
+            </div>
+
+            <div class="one_shipping_option fadeIn fadeIn-50ms">
+              <div class="shipping_option_title">Optimized Option 1</div>
+              <img class="option_img" src="img/ups_img.png"/>
+              <div class="option_price">$5.67</div>
+              <div class="nearest_site">Drop package <span style="text-decoration:underline">here</span></div>
+            </div>
+
+            <div class="one_shipping_option fadeIn fadeIn-50ms">
+              <div class="shipping_option_title">Option 2</div>
+              <img class="option_img" src="img/fedex_img.png"/>
+              <div class="option_price">$6.51</div>
+              <div class="nearest_site">Drop package <span style="text-decoration:underline">here</span></div>
+            </div>
+
+            <div class="one_shipping_option fadeIn fadeIn-50ms">
+              <div class="shipping_option_title">Option 3</div>
+              <img class="option_img" src="img/usps_img.png"/>
+              <div class="option_price">$7.12</div>a
+              <div class="nearest_site">Drop package <span style="text-decoration:underline">here</span></div>
+            </div>
+
+            <div class="one_shipping_option fadeIn fadeIn-50ms">
+              <div class="shipping_option_title">Find Another Option</div>
+              <img class="add_option_img" src="img/add_option.png"/>
+              <div class="parcel_company"><span style="text-decoration:underline">I am a parcel company</span></div>
+            </div>
+
+
+          </div>
+        </div>
+
+        <div class="detail_container" ng-show="order.expand_inventory==true">
+          <div class="detail_header">Inventory</div>
+        </div>
+
+        <div class="detail_container" ng-show="order.expand_customer==true">
+          <div class="detail_header">Customer Service</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  </div>
+
+  <script src="jquery-1.11.2.min.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="js/controller.js"></script>
+  <script src="js/display.js"></script>
+  <script src="components/version/version.js"></script>
+  <script src="components/version/version-directive.js"></script>
+  <script src="components/version/interpolate-filter.js"></script>
+</div>
+</body>
+</html>
