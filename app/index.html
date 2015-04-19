@@ -29,49 +29,71 @@
     <div ng-repeat="shipment in shipments | orderBy:'id'">
 
       <!-- This is need to ship list -->
-      <div class="shipment_unit" ng-init="shipment.expand=false;" ng-show="shipment.status==='Pending'">
-        <div class="order_content" ng-click="">
-          <div class="ship_time">Deliver in 2 days to:</div>
-          <div class="ship_address">3113 Mount Isabel Drive, San Jose, CA, US. 95148</div>
+      <div  ng-class="{
+            'shipment_unit': true, 
+            'shipment_unit_expand': shipment.expand===true
+            }"
+            ng-init="shipment.expand=false;" 
+            ng-click="shipment.expand=!shipment.expand;" 
+            ng-show="shipment.status==='Pending'"
+        >
+        <div class="ship_content" >
+          <div class="ship_time">Deliver in {{shipment.days}} days to:</div>
+          <div class="ship_address">{{shipment.address}}, {{shipment.city}}, {{shipment.state}}, {{shipment.country}}, {{shipment.zip}}</div>
+          <img class="minimize" src="img/minimize.png" ng-show="shipment.expand===true"/>
         </div>
-        <div class="expand_container">
+        <div class="expand_container" ng-animate="shipment.expand===true">
+          <div class="product_container">
+          </div>
+          <div class="parcel_container">
+          </div>
         </div>
       </div>
 
-      <!-- This is shipped list -->
-      <div class="shipment_unit" ng-init="shipment.expand=false;" ng-show="shipment.status!=='Pending'">
-        <div class="order_content_shipped" ng-click="">
+      <!-- This is shipping list -->
+      <div class="shipped_unit" ng-init="shipment.expand=false;" ng-show="shipment.status!=='Pending'">
+        <div class="ship_content_shipping">
           <div class="progessbar"></div>
           <div ng-class="{
               progessbar_progress: true,
               scheduled: shipment.status==='Scheduled',
               picked_up: shipment.status==='Picked Up',
-              in_transit: shipment.status==='In Transit',
-              delivered: shipment.status==='Delivered'
+              in_transit: shipment.status==='In Transit'
               }">
             <div class="package">
               <div class="package_tail" ng-show="shipment.status!=='Scheduled'"></div>
               <img class="package_img" src="img/package.png"/>
+              <img class="package_delayed" src="img/delayed.png" ng-show="shipment.delayed==='true'"/>
               <div class="package_status">{{shipment.status}}</div>
             </div>
           </div>
-        <div class="expand_container">
         </div>
       </div>
     </div>
+
+      <!-- This is last one for all shipped -->
+      <div class="delivered_unit" ng-init="shipment.expand=false;">
+        <div class="ship_content_delivered">
+          <div class="package_delivered">
+            <img class="package_img" src="img/package.png"/>
+            <div class="package_status">Delivered</div>
+            <div class="total_delivery">Total 132</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- The End -->
+      <div class="end"></div>
+
+
+    <script src="jquery-1.11.2.min.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="js/controller.js"></script>
+    <script src="js/display.js"></script>
+    <script src="components/version/version.js"></script>
+    <script src="components/version/version-directive.js"></script>
+    <script src="components/version/interpolate-filter.js"></script>
   </div>
-
-  <div class="end_bar"></div>
-
-
-  <script src="jquery-1.11.2.min.js"></script>
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="js/controller.js"></script>
-  <script src="js/display.js"></script>
-  <script src="components/version/version.js"></script>
-  <script src="components/version/version-directive.js"></script>
-  <script src="components/version/interpolate-filter.js"></script>
-</div>
 </body>
 </html>

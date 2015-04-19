@@ -44,5 +44,9 @@ var store = angular.module('store',['ngRoute'])
     $scope.showCancelled_flag = true;
   };
 
+  $scope.expand = function () {
+
+  }
+
 
 })
