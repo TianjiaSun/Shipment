@@ -23,12 +23,13 @@
   <div class="search_bar_bn">Search</div>
   </div>
 
-  <div id="scan_top">
-    <img class="scanner_img" src="img/barcode_scanner.png" ng-click="scanner()">
-  </div>
-
   <!-- This is main page -->
   <div id="list_container" hidden>
+
+    <div id="scan_top">
+      <img class="scanner_img" src="img/barcode_scanner.png" ng-click="scanner()">
+    </div>
+    
     <!-- This is all shipment list -->
     <div ng-repeat="shipment in shipments | orderBy:'id'">
 
