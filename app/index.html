@@ -23,6 +23,10 @@
   <div class="search_bar_bn">Search</div>
   </div>
 
+  <div id="scan_top">
+    <img class="scanner_img" src="img/barcode_scanner.png" ng-click="scanner()">
+  </div>
+
   <!-- This is main page -->
   <div id="list_container" hidden>
     <!-- This is all shipment list -->
@@ -33,20 +37,77 @@
             'shipment_unit': true, 
             'shipment_unit_expand': shipment.expand===true
             }"
-            ng-init="shipment.expand=false;" 
-            ng-click="shipment.expand=!shipment.expand;" 
+            ng-init="shipment.expand=false;"  
             ng-show="shipment.status==='Pending'"
         >
-        <div class="ship_content" >
+        <div class="ship_content" ng-click="shipment.expand=!shipment.expand;">
           <div class="ship_time">Deliver in {{shipment.days}} days to:</div>
           <div class="ship_address">{{shipment.address}}, {{shipment.city}}, {{shipment.state}}, {{shipment.country}}, {{shipment.zip}}</div>
           <img class="minimize" src="img/minimize.png" ng-show="shipment.expand===true"/>
         </div>
         <div class="expand_container" ng-animate="shipment.expand===true">
+
           <div class="product_container">
+            <div class="left_icon_bar">
+              <img class="left_icon_img" src="img/order.png"/>
+            </div>
+            <div class="one_ordered_product fadeIn fadeIn-50ms">
+              <div class="ordered_product_count">X1</div>
+              <img class="product_img" src="img/bag_1.jpg"/>
+              <div class="ordered_product_name">Kate Spade New York Cedar Street Handle Handbag</div>
+            </div>
+            <div class="one_ordered_product fadeIn fadeIn-50ms">
+              <div class="ordered_product_count">X2</div>
+              <img class="product_img" src="img/bag_2.jpg"/>
+              <div class="ordered_product_name">MyLux Fashion Designer Office Tote Shoulder Handbag</div>
+            </div>
           </div>
+
           <div class="parcel_container">
+            <div class="left_icon_bar">
+              <img class="left_icon_img" src="img/shipment.png"/>
+            </div>
+
+            <div class="case_container fadeIn fadeIn-50ms">
+              <img class="scale fadeIn fadeIn-50ms fadeIn-Delay-50ms" src="img/scale_black.png"/>
+              <input class="weight_input fadeIn fadeIn-50ms fadeIn-Delay-50ms" value="2.3 Pound"></input>
+              <div class="nearest_site"><span style="text-decoration:underline">An Oversized Package?</span></div>
+            </div>
+
+            <div class="one_shipping_option fadeIn fadeIn-50ms">
+              <div class="shipping_option_title">Optimized Option 1</div>
+              <img class="option_img" src="img/ups_img.png"/>
+              <div class="option_price">$5.67</div>
+              <div class="nearest_site">Drop package <span style="text-decoration:underline">here</span></div>
+            </div>
+
+            <div class="one_shipping_option fadeIn fadeIn-50ms">
+              <div class="shipping_option_title">Option 2</div>
+              <img class="option_img" src="img/fedex_img.png"/>
+              <div class="option_price">$6.51</div>
+              <div class="nearest_site">Drop package <span style="text-decoration:underline">here</span></div>
+            </div>
+
+            <div class="one_shipping_option fadeIn fadeIn-50ms">
+              <div class="shipping_option_title">Option 3</div>
+              <img class="option_img" src="img/usps_img.png"/>
+              <div class="option_price">$7.12</div>a
+              <div class="nearest_site">Drop package <span style="text-decoration:underline">here</span></div>
+            </div>
+
+            <div class="one_shipping_option fadeIn fadeIn-50ms">
+              <div class="shipping_option_title">Find Another Option</div>
+              <img class="add_option_img" src="img/add_option.png"/>
+              <div class="parcel_company"><span style="text-decoration:underline">I am a parcel company</span></div>
+            </div>
           </div>
+
+          <div class="add_link_container">
+            <div class="left_icon_bar">
+              <img class="left_icon_img" src="img/add_link.png"/>
+            </div>
+          </div>
+
         </div>
       </div>
 
