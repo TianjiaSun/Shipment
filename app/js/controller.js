@@ -22,6 +22,16 @@ var store = angular.module('store',['ngRoute'])
     $scope.shipments = angular.fromJson(data.response);
   });
 
+  $scope.addLink = function() {
+    var payload = {
+      op: 'addLink',
+      originAppId: 'Customers'
+    };
+    var targetUrl = (window.location != window.parent.location) ? document.referrer: document.location;
+    parent.postMessage(payload, targetUrl);
+    // console.log(payload);
+  };
+
   // to avoid flashing during page loading
   $scope.init = function () {
     $("#list_container").fadeIn(1000);
